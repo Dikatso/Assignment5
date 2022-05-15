@@ -19,9 +19,27 @@ def main():
     MIN_EPSILON = 0.01
     DECAY_RATE = 0.01
     
+    # Create FourRooms Object
+    fourRoomsObj = FourRooms('simple')
     q_table = np.zeros((13, 13))
 
     print(q_table)
+    
+    for epoch in range(EPOCH):
+        fourRoomsObj.newEpoch()
+        currentPosition = fourRoomsObj.getPosition()
+        
+        
+        while True:
+            if random.uniform(0, 1) > EPLISON:
+                # return np.argmax(q_values[current_row_index, current_column_index])
+                nextStep = np.argmax(q_table[currentPosition[0],currentPosition[1]]) 
+            else:
+                nextStep = random.randint(0, 3)
+                
+        gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(nextStep)
+        
+        
     # Create FourRooms Object
     # fourRoomsObj = FourRooms('simple')
     
