@@ -11,14 +11,55 @@ from FourRooms import FourRooms
 
 
 def main():
-    EPOCH = 5
+    
+    # q_table = np.array(
+    #         [
+    #             # 0   1   2   3   4   5   6   7   8   9  10  11  12
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #         ], dtype=np.float32
+    #     )
+    
+    # r_table = np.array(
+    #         [
+    #             # 0   1   2   3   4   5   6   7   8   9  10  11  12
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #         ], dtype=np.float32
+    #     )
+    
+    
+    EPOCH = 100
     LEARNING_RATE = 0.7
     DISCOUNT_FACTOR = 0.9
-    EPLISON =1.0
+    EPLISON =1
     MAX_EPSILON =1.0
     MIN_EPSILON = 0.01
     DECAY_RATE = 0.01
     
+    rewards_track = 0
     # Create FourRooms Object
     fourRoomsObj = FourRooms('simple')
     q_table = np.zeros((13, 13))
@@ -28,17 +69,41 @@ def main():
     for epoch in range(EPOCH):
         fourRoomsObj.newEpoch()
         currentPosition = fourRoomsObj.getPosition()
+        notDone = True
+        rewards_track = 0
         
-        
-        while True:
+        while notDone:
             if random.uniform(0, 1) > EPLISON:
                 # return np.argmax(q_values[current_row_index, current_column_index])
                 nextStep = np.argmax(q_table[currentPosition[0],currentPosition[1]]) 
             else:
                 nextStep = random.randint(0, 3)
-                
-        gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(nextStep)
         
+            gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(nextStep)
+            
+            # Update Q-table for Q(s,a)
+            if q_table[newPos[0], newPos[1]] == 0:
+                reward = -1
+                
+            else:
+                reward = q_table[newPos[0], newPos[1]]
+            
+            q_table[newPos[0], newPos[1]] = q_table[newPos[0], newPos[1]] * (1 - LEARNING_RATE) + LEARNING_RATE * (reward + DISCOUNT_FACTOR * np.max(q_table[newPos[0], newPos[1]]))
+            if isTerminal:
+                notDone = False
+                #q_table[newPos[0], newPos[1]] = 100
+                print("yeee")
+                break
+            
+        
+        normalize_q=q_table/max(q_table[q_table.nonzero()])*100
+        normalize_q.astype(int)
+        
+        print(q_table)
+        # print("normalized")
+        # print(normalize_q)
+        
+    fourRoomsObj.showPath(-1)    
         
     # Create FourRooms Object
     # fourRoomsObj = FourRooms('simple')
