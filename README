@@ -1,0 +1,20 @@
+
+
+## Files
+
+
+Scenario{SUFFIX}.py - These files contain the different implementations of the scenarios, simple, multi and rgb.
+
+Makefile - Helps to build an executable that might take many commands to create.
+log.txt - Git usage log
+requirements.txt - Contains names of all packages that need to be installed once the virtual environment is created
+
+## Usage
+
+- Create the virtual environment by using the "make venv" command
+- Install all required libraries by using the "make install" command
+- Run program using the "python3 Scenario{SUFFIX}.py" where the suffix is the number of the scenario.
+
+- Clean all generated files by using the "make clean" command
+
+Code should run with no problems on nightmare. Happy Package Collecting :)
