@@ -1,6 +1,6 @@
 # Dikatso Moshweunyane
 # 14 May 2022
-# CSC3002 ASSIGN5 Scenario1
+# CSC3002 ASSIGN5 Scenario2
 
 import numpy as np
 import pandas as pd
@@ -57,10 +57,18 @@ def main():
     MAX_EPSILON =1.0
     MIN_EPSILON = 0.01
     DECAY_RATE = 0.01
-    
     rewards_track = 0
+    
+    checkInput = eval(input("Enter a number: \n1 - Deterministic \n2 - Stochastic \n"))
+    
+    if checkInput == 1:
+        fourRoomsObj = FourRooms('multi')
+    
+    else:
+        fourRoomsObj = FourRooms('multi', True)
+    
     # Create FourRooms Object
-    fourRoomsObj = FourRooms('multi')
+    # fourRoomsObj = FourRooms('multi')
     global_start = fourRoomsObj.getPosition()
     
     for epoch in range(EPOCH):

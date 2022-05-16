@@ -60,7 +60,14 @@ def main():
     
     rewards_track = 0
     # Create FourRooms Object
-    fourRoomsObj = FourRooms('simple')
+    checkInput = eval(input("Enter a number: \n1 - Deterministic \n2 - Stochastic \n"))
+    
+    if checkInput == 1:
+        fourRoomsObj = FourRooms('simple')
+    
+    else:
+        fourRoomsObj = FourRooms('simple', True)
+    
     global_start = fourRoomsObj.getPosition()
     
     for epoch in range(EPOCH):
