@@ -3,7 +3,6 @@
 # CSC3002 ASSIGN5 Scenario2
 
 import numpy as np
-import pandas as pd
 import random
 from matplotlib import pyplot, colors
 from FourRooms import FourRooms
@@ -88,10 +87,10 @@ def main():
             else:
                 nextStep = random.randint(0, 3)
 
-            if packagesRemaining == 3 and gTypes[gridType] == "BLUE":
+            if packagesRemaining == 2 and gTypes[gridType] == "BLUE":
                 continue
             
-            if packagesRemaining == 2 and gTypes[gridType] == "GREEN":
+            if packagesRemaining == 3 and gTypes[gridType] == "GREEN":
                 continue
             
             if packagesRemaining == 1 and gTypes[gridType] == "RED":
